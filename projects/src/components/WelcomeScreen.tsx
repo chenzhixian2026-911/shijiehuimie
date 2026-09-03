@@ -11,7 +11,7 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
       </div>
 
       <h1
-        className="text-3xl font-bold text-[var(--color-text)] mb-3"
+        className="text-3xl font-bold gradient-text-purple mb-3"
         style={{ animationDelay: '0.2s' }}
       >
         哄哄模拟器

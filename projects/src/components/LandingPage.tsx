@@ -57,8 +57,8 @@ export default function LandingPage({ onStart, onGoToBlog, onGoToLeaderboard, us
           <p className="text-sm font-medium text-[var(--color-primary)] tracking-wide uppercase mb-4 animate-fade-in-up stagger-1">
             情侣沟通练习工具
           </p>
-          <h1 className="text-5xl sm:text-7xl font-bold text-[var(--color-text)] tracking-tight leading-tight mb-6 animate-fade-in-up stagger-2">
-            哄哄<span className="gradient-text">模拟器</span>
+          <h1 className="text-5xl sm:text-7xl font-bold gradient-text-purple tracking-tight leading-tight mb-6 animate-fade-in-up stagger-2">
+            哄哄<span>模拟器</span>
           </h1>
           <p className="text-lg sm:text-xl text-[var(--color-text-secondary)] leading-relaxed max-w-xl mx-auto mb-10 animate-fade-in-up stagger-3">
             每一次争吵，都是一次学会理解的机会。<br />
