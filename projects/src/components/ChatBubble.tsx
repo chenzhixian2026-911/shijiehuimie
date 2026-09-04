@@ -1,9 +1,9 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import type { ChatMessage } from '../lib/game-engine';
+import GirlfriendAvatar from './GirlfriendAvatar';
 
 interface ChatBubbleProps {
   message: ChatMessage;
-  emoji: string;
   anger: number;
 }
 
@@ -23,7 +23,7 @@ const QUALITY_LABELS: Record<string, string> = {
   toxic: '危险',
 };
 
-export default function ChatBubble({ message, emoji, anger }: ChatBubbleProps) {
+export default function ChatBubble({ message, anger }: ChatBubbleProps) {
   const isPlayer = message.role === 'player';
   const [isLoading, setIsLoading] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -219,9 +219,7 @@ export default function ChatBubble({ message, emoji, anger }: ChatBubbleProps) {
     <div className={`flex gap-2 ${isPlayer ? 'flex-row-reverse' : 'flex-row'} ${isPlayer ? 'animate-slide-in-right' : 'animate-slide-in-left'}`}>
       {/* Avatar */}
       {!isPlayer && (
-        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[var(--color-primary-light)] flex items-center justify-center text-lg">
-          {emoji}
-        </div>
+        <GirlfriendAvatar anger={anger} size={34} className="mt-0.5" />
       )}
 
       <div className={`max-w-[75%] ${isPlayer ? 'items-end' : 'items-start'}`}>

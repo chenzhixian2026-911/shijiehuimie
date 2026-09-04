@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 import {
   type GameState,
-  getGirlfriendEmoji,
   getAngerColor,
   getAngerLabel,
 } from '../lib/game-engine';
 import ChatBubble from './ChatBubble';
 import AngerMeter from './AngerMeter';
+import GirlfriendAvatar from './GirlfriendAvatar';
 
 interface GameScreenProps {
   gameState: GameState;
@@ -38,7 +38,6 @@ export default function GameScreen({ gameState, onSend }: GameScreenProps) {
     setInput('');
   };
 
-  const emoji = getGirlfriendEmoji(gameState.anger);
   const angerColor = getAngerColor(gameState.anger);
   const angerLabel = getAngerLabel(gameState.anger);
 
@@ -59,7 +58,7 @@ export default function GameScreen({ gameState, onSend }: GameScreenProps) {
               </svg>
             </button>
             <div className="flex items-center gap-2">
-              <span className="text-2xl">{emoji}</span>
+              <GirlfriendAvatar anger={gameState.anger} size={42} animated />
               <div>
                 <h2 className="text-sm font-semibold text-[var(--color-text)]">女友</h2>
                 <span className="text-xs font-medium" style={{ color: angerColor }}>{angerLabel}</span>
@@ -81,7 +80,6 @@ export default function GameScreen({ gameState, onSend }: GameScreenProps) {
           <ChatBubble
             key={msg.id}
             message={msg}
-            emoji={emoji}
             anger={gameState.anger}
           />
         ))}

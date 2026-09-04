@@ -135,6 +135,63 @@ body {
   -webkit-backdrop-filter: blur(20px);
 }
 
+/* 3D 立体女友头像 */
+.avatar-3d {
+  perspective: 700px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.avatar-3d-inner {
+  transform-style: preserve-3d;
+  animation: avatar-float 4.5s ease-in-out infinite;
+  will-change: transform;
+}
+
+.avatar-svg {
+  filter: drop-shadow(0 4px 6px rgba(232, 82, 122, 0.28));
+}
+
+@keyframes avatar-float {
+  0%, 100% { transform: translateY(0) rotateY(-7deg) rotateX(3deg); }
+  50% { transform: translateY(-3px) rotateY(7deg) rotateX(-2deg); }
+}
+
+/* 恋爱模式漂浮爱心 */
+.avatar-heart {
+  transform-origin: center;
+  animation: avatar-heart-float 1.8s ease-in-out infinite;
+}
+
+@keyframes avatar-heart-float {
+  0% { transform: translateY(2px) scale(0.9); opacity: 0.55; }
+  50% { transform: translateY(-3px) scale(1.05); opacity: 1; }
+  100% { transform: translateY(2px) scale(0.9); opacity: 0.55; }
+}
+
+/* 生气时的蒸汽 */
+.avatar-steam {
+  transform-origin: center;
+  animation: avatar-steam-rise 1.6s ease-in-out infinite;
+}
+
+@keyframes avatar-steam-rise {
+  0% { transform: translateY(3px) scale(0.8); opacity: 0.4; }
+  50% { transform: translateY(-3px) scale(1.1); opacity: 0.95; }
+  100% { transform: translateY(3px) scale(0.8); opacity: 0.4; }
+}
+
+/* 暴怒 💢 标记跳动 */
+.avatar-anger {
+  transform-origin: 89px 31px;
+  animation: avatar-anger-pop 0.6s ease-in-out infinite;
+}
+
+@keyframes avatar-anger-pop {
+  0%, 100% { transform: scale(1) rotate(-4deg); }
+  50% { transform: scale(1.18) rotate(4deg); }
+}
+
 /* Auth pages */
 .auth-card {
   background: var(--color-card);
