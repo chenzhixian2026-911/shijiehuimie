@@ -4,6 +4,7 @@ interface BlogPost {
   id: number;
   title: string;
   summary: string;
+  cover_url?: string | null;
   created_at: string;
 }
 
@@ -148,6 +149,16 @@ export default function BlogListPage({ onBack, onSelectArticle }: BlogListPagePr
                         <span>阅读 {getReadTime(article.summary)}</span>
                       </div>
                     </div>
+                    {article.cover_url && (
+                      <div className="flex-shrink-0">
+                        <img
+                          src={article.cover_url}
+                          alt={`${article.title} 配图`}
+                          loading="lazy"
+                          className="w-24 h-20 object-cover rounded-xl border border-[var(--border)]"
+                        />
+                      </div>
+                    )}
                     <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[var(--bg)] flex items-center justify-center group-hover:bg-[var(--primary)] group-hover:text-white transition-colors text-[var(--text-tertiary)]">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M5 12h14M12 5l7 7-7 7" />

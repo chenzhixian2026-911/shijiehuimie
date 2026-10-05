@@ -213,6 +213,8 @@ async function initTables(): Promise<void> {
       );
     `);
     await pool.query(`CREATE INDEX IF NOT EXISTS blog_posts_created_at_idx ON blog_posts(created_at);`);
+    // AI 配图（火山方舟生成后转存 Supabase Storage 的永久地址）
+    await pool.query(`ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS cover_url TEXT;`);
 
     await pool.query(`
       CREATE TABLE IF NOT EXISTS game_records (

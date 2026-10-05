@@ -19,6 +19,22 @@
   --color-text-tertiary: #AEAEB2;
   --color-border: #E5E5EA;
   --color-card: #FFFFFF;
+
+  /* 别名：部分页面引用的是无 --color 前缀的变量名，这里统一映射 */
+  --primary: var(--color-primary);
+  --bg-primary: var(--color-primary);
+  --bg: var(--color-bg);
+  --bg-card: var(--color-card);
+  --text: var(--color-text);
+  --text-primary: var(--color-text);
+  --text-secondary: var(--color-text-secondary);
+  --text-tertiary: var(--color-text-tertiary);
+  --border: var(--color-border);
+  --border-color: var(--color-border);
+  --color-text-primary: var(--color-text);
+  --color-secondary: var(--color-coral);
+  --color-bg-secondary: #F2F2F7;
+  --color-bg-card: var(--color-card);
 }
 
 * {

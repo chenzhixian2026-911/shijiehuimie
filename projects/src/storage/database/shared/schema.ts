@@ -14,6 +14,7 @@ export const blogPosts = pgTable(
 		title: text("title").notNull(),
 		summary: text("summary").notNull(),
 		content: text("content").notNull(),
+		cover_url: text("cover_url"),
 		created_at: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 	},
 	(table) => [

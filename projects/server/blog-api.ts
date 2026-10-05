@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { getSupabaseClient } from './src/storage/database/db-client.js';
 import { LLMClient, Config, HeaderUtils } from 'coze-coding-dev-sdk';
+import { generateArticleCover, IllustrationServiceError } from './src/services/illustration-service.js';
 
 const router = Router();
 
@@ -18,7 +19,7 @@ router.get('/', async (req: Request, res: Response) => {
     const client = getSupabaseClient();
     const { data, error } = await client
       .from('blog_posts')
-      .select('id, title, summary, created_at')
+      .select('id, title, summary, cover_url, created_at')
       .order('created_at', { ascending: false });
     
     if (error) throw new Error(`查询失败: ${error.message}`);
@@ -36,7 +37,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     const client = getSupabaseClient();
     const { data, error } = await client
       .from('blog_posts')
-      .select('id, title, summary, content, created_at')
+      .select('id, title, summary, content, cover_url, created_at')
       .eq('id', id)
       .maybeSingle();
     
@@ -137,6 +138,23 @@ router.post('/generate', async (req: Request, res: Response) => {
   } catch (err) {
     console.error('生成文章失败:', err);
     res.status(500).json({ error: '生成文章失败' });
+  }
+});
+
+// POST /api/blog/:id/illustration - 用火山方舟文生图为文章生成封面，转存 Supabase 后回写 cover_url
+router.post('/:id/illustration', async (req: Request, res: Response) => {
+  try {
+    const articleId = Number(req.params.id);
+    const article = await generateArticleCover(articleId);
+    res.json(article);
+  } catch (err) {
+    if (err instanceof IllustrationServiceError) {
+      console.error('AI 配图失败:', err.code, err.message);
+      res.status(err.httpStatus).json({ error: err.message, code: err.code });
+      return;
+    }
+    console.error('AI 配图未知错误:', err);
+    res.status(500).json({ error: 'AI 配图失败，请稍后重试', code: 'ILLUSTRATION_ERROR' });
   }
 });
 

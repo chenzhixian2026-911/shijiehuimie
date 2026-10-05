@@ -5,6 +5,7 @@ interface Article {
   title: string;
   summary: string;
   content: string;
+  cover_url?: string | null;
   created_at: string;
 }
 
@@ -16,6 +17,9 @@ interface ArticleDetailPageProps {
 export default function ArticleDetailPage({ articleId, onBack }: ArticleDetailPageProps) {
   const [article, setArticle] = useState<Article | null>(null);
   const [loading, setLoading] = useState(true);
+  const [coverUrl, setCoverUrl] = useState<string | null>(null);
+  const [coverLoading, setCoverLoading] = useState(false);
+  const [coverError, setCoverError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchArticle();
@@ -27,10 +31,30 @@ export default function ArticleDetailPage({ articleId, onBack }: ArticleDetailPa
       if (!res.ok) throw new Error('Failed to fetch');
       const data = await res.json();
       setArticle(data);
+      setCoverUrl(data.cover_url ?? null);
+      setCoverError(null);
     } catch (err) {
       console.error('获取文章详情失败:', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleGenerateCover = async () => {
+    if (!article || coverLoading) return;
+    setCoverLoading(true);
+    setCoverError(null);
+    try {
+      const res = await fetch(`/api/blog/${article.id}/illustration`, { method: 'POST' });
+      const data = await res.json().catch(() => null);
+      if (!res.ok) {
+        throw new Error(data?.error || 'AI 配图失败，请稍后重试');
+      }
+      setCoverUrl(data.cover_url ?? null);
+    } catch (err) {
+      setCoverError(err instanceof Error ? err.message : 'AI 配图失败，请稍后重试');
+    } finally {
+      setCoverLoading(false);
     }
   };
 
@@ -100,12 +124,51 @@ export default function ArticleDetailPage({ articleId, onBack }: ArticleDetailPa
             <span className="w-1 h-1 rounded-full bg-[var(--border)]" />
             <span>阅读 {getReadTime(article.content)}</span>
           </div>
+          <div className="mt-6 flex flex-wrap items-center gap-3 animate-fade-in-up" style={{ animationDelay: '150ms' }}>
+            <button
+              onClick={handleGenerateCover}
+              disabled={coverLoading}
+              className="flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--primary)] text-white text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-60"
+            >
+              {coverLoading ? (
+                <>
+                  <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                  AI 绘图中，约需 30-60 秒...
+                </>
+              ) : (
+                <>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                    <circle cx="8.5" cy="8.5" r="1.5" />
+                    <path d="M21 15l-5-5L5 21" />
+                  </svg>
+                  {coverUrl ? '重新生成配图' : 'AI 生成配图'}
+                </>
+              )}
+            </button>
+            {coverError && <span className="text-xs text-red-500">{coverError}</span>}
+          </div>
         </div>
 
         {/* Divider */}
         <div className="max-w-3xl mx-auto px-6">
           <div className="h-px bg-[var(--border)]" />
         </div>
+
+        {/* AI Cover */}
+        {coverUrl && (
+          <div className="max-w-3xl mx-auto px-6 mt-8 animate-fade-in-up">
+            <img
+              src={coverUrl}
+              alt={`${article.title} 配图`}
+              className="w-full aspect-[2/1] object-cover rounded-2xl border border-[var(--border)]"
+            />
+            <p className="mt-2 text-xs text-[var(--text-tertiary)] text-right">AI 生成配图 · 豆包 Seedream</p>
+          </div>
+        )}
 
         {/* Content */}
         <div className="max-w-3xl mx-auto px-6 py-8">

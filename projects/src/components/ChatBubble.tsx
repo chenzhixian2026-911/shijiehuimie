@@ -106,7 +106,7 @@ export default function ChatBubble({ message, anger }: ChatBubbleProps) {
       }
 
       const femaleVoiceNames = ['yaoyao', 'xiaoxiao', 'huihui', 'xiaoyi', '女', 'female'];
-      let selectedVoice: SpeechSynthesisVoice | null = null;
+      let selectedVoice: SpeechSynthesisVoice | null | undefined = null;
       
       for (const name of femaleVoiceNames) {
         selectedVoice = voices.find(v => 
